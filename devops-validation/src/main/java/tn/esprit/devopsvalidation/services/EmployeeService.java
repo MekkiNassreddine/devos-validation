@@ -38,10 +38,11 @@ public class EmployeeService implements IEmployeeSeervice{
 
     @Override
     public void affecterEmployeADepartement(long employeId, long depId) {
-         Employee employee = employeeRepository.findById(employeId).get();
-         Departement departement = departementRepository.findById(depId).get();
-
-         employee.setDepartement(departement);
+         Departement departement = departementRepository.findById(depId).
+                 orElseThrow(()->new EntityNotFoundException("Departement with id " + depId + "was not found"));;
+        Employee employee = employeeRepository.findById(employeId)
+                .orElseThrow(()->new EntityNotFoundException("Employee with id " + employeId + "was not found"));
+        employee.setDepartement(departement);
          employeeRepository.save(employee);
     }
 

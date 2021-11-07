@@ -10,6 +10,8 @@ import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;
 import org.apache.log4j.Logger;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
 public class ProjectService implements IProjectService{
 
@@ -39,8 +41,8 @@ public class ProjectService implements IProjectService{
     public int deleteProject(long id) {
        // logger.info("in delete Project " +id );
         if(projectRepository.existsById(id)){
-            //logger.info("perject to delete existe " +id );
-            Project projectToDelete = projectRepository.findById(id).get();
+            Project projectToDelete = projectRepository.findById(id)
+                    .orElseThrow(()->new EntityNotFoundException("Project with id " + id + "was not found"));
             projectRepository.delete(projectToDelete);
             return 1;
         }
